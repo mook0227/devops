@@ -38,8 +38,9 @@ def home():
 
 @app.route("/predict", methods=['POST'])
 def predict():
-    model = tf.keras.models.load_model('./saved_model')
-    app.logger.info(f"Model loaded.")
+    # Load the SavedModel as an inference-only layer
+    model = tf.keras.layers.TFSMLayer('./saved_model', call_endpoint='serving_default')
+    app.logger.info("Model loaded using TFSMLayer.")
     
     json_payload = request.json
     app.logger.info(f"JSON payload: {json_payload}")
